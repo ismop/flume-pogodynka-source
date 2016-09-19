@@ -22,10 +22,10 @@
 
 	<groupId>pl.cyfronet.ismop</groupId>
 	<artifactId>flume-pogodynka-source</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>Leveemon source</name>
+	<name>Pogodynka source</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
