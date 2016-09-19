@@ -25,10 +25,10 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 
 	private static final Logger logger = LoggerFactory.getLogger(PogodynkaSource.class);
 	
-	private static final String POGODYNKA_SENSOR_ID_KEY = "pogodynka.sensor.id";
-	private static final String POGODYNKA_URL_KEY = "pogodynka.url";
-	private static final String DAP_CUSTOM_ID_KEY = "pogodynka.dap.custom.id";
-	private static final String POLLING_FREQUENCY = "pogodynka.polling.frequency";
+	private static final String POGODYNKA_SENSOR_ID_KEY = "pogodynkaSensorId";
+	private static final String POGODYNKA_URL_KEY = "pogodynkaUrl";
+	private static final String DAP_CUSTOM_ID_KEY = "dapParameterCustomId";
+	private static final String POLLING_FREQUENCY = "pollingFrequency";
 	
 	private String pogodynkaUrl;
 	private String pogodynkaSensorId;
