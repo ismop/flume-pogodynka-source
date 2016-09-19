@@ -109,6 +109,8 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 	private Event prepareEvent(Reading reading) throws IOException {
 		Builder builder = MomEvent.newBuilder();
 		MomEvent momEvent = builder.setTimestamp(reading.getTimestamp().getTime())
+				.setMomTopicName("")
+				.setMonitoringStationId("")
 				.setSensorId(dapCustomId)
 				.setValue(reading.getValue())
 				.build();
