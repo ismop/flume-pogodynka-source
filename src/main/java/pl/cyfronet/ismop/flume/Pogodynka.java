@@ -65,7 +65,10 @@ public class Pogodynka {
 			ZonedDateTime dateTime = ZonedDateTime.parse(dateNode.asText(),
 					DateTimeFormatter.ISO_INSTANT.withZone(
 							ZoneOffset.of("+02:00")));	
-			Date date = Date.from(dateTime.toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant());
+			Date date = Date.from(dateTime.toLocalDateTime()
+					.atZone(
+							ZoneOffset.of("+02:00")).toInstant());
+			
 			float value = Float.parseFloat(valueNode.asText());
 			
 			return new Reading(date, value);
