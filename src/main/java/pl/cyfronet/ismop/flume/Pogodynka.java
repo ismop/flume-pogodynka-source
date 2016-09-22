@@ -19,6 +19,7 @@
 package pl.cyfronet.ismop.flume;
 
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -60,8 +61,10 @@ public class Pogodynka {
 			JsonNode jsonNode = readTree.get("status");
 			JsonNode dateNode = jsonNode.get("currentDate");
 			JsonNode valueNode = jsonNode.get("currentValue");
-	
-			ZonedDateTime dateTime = ZonedDateTime.parse(dateNode.asText(), DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.systemDefault()));	
+			
+			ZonedDateTime dateTime = ZonedDateTime.parse(dateNode.asText(),
+					DateTimeFormatter.ISO_INSTANT.withZone(
+							ZoneOffset.of("+02:00")));	
 			Date date = Date.from(dateTime.toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant());
 			float value = Float.parseFloat(valueNode.asText());
 			
