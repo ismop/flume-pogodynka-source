@@ -18,6 +18,7 @@
  */
 package pl.cyfronet.ismop.flume;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class Reading {

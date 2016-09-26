@@ -46,16 +46,16 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 	private static final String POGODYNKA_SENSOR_ID_KEY = "pogodynkaSensorId";
 	private static final String POGODYNKA_URL_KEY = "pogodynkaUrl";
 	private static final String DAP_CUSTOM_ID_KEY = "dapParameterCustomId";
-	private static final String POLLING_FREQUENCY = "pollingFrequencyMinutes";
 	
 	private String pogodynkaUrl;
 	private String pogodynkaSensorId;
 	private String dapCustomId;
-	private Long pollingFrequency;
 	
 	private MomEncoderDecoder encoder;
 	private Pogodynka pogodynka;
 
+	private Reading tempReading;
+	
 	public PogodynkaSource() {
 		super();
 		encoder = new MomEncoderDecoder();
@@ -66,7 +66,6 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 		pogodynkaSensorId = context.getString(POGODYNKA_SENSOR_ID_KEY, "149190230");
 		pogodynkaUrl = context.getString(POGODYNKA_URL_KEY, "http://monitor.pogodynka.pl/api/station/hydro/");
 		dapCustomId = context.getString(DAP_CUSTOM_ID_KEY, "POGODYNKA_149190230");
-		pollingFrequency = context.getLong(POLLING_FREQUENCY, 15L /*minutes*/);
 	}
 
 	@Override
@@ -74,6 +73,7 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 		pogodynka = new Pogodynka();
 		pogodynka.setSensorId(pogodynkaSensorId);
 		pogodynka.setUrl(pogodynkaUrl);
+		tempReading = null;
 		super.start();
 	}
 
@@ -87,15 +87,15 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 	public Status process() throws EventDeliveryException {
 		Status status = null;
 		try {
-			Thread.sleep(pollingFrequency  * 60 /*seconds*/ * 1000 /*milliseconds*/);
 			Reading reading = pogodynka.nextReading();
-			Event event = prepareEvent(reading);
-			getChannelProcessor().processEvent(event);
-			logger.debug("Pogodynka source event processed: ", event);
-			status = Status.READY;
-		} catch (InterruptedException e) {
-			logger.warn("Pogodynka source event processing interrupted");
-			status = Status.BACKOFF;
+			if (readingRepeated(reading)) {
+				status = Status.BACKOFF;
+			} else {
+				Event event = prepareEvent(reading);
+				getChannelProcessor().processEvent(event);
+				logger.debug("Pogodynka source event processed: ", event);
+				status = Status.READY;
+			}
 		} catch (Throwable t) {
 			logger.warn("Pogodynka source event processing failed", t);
 			status = Status.BACKOFF;
@@ -118,4 +118,10 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 		return event;
 	}
 
+	public boolean readingRepeated(Reading newReading) {
+		boolean repeated = tempReading != null && tempReading.getTimestamp().equals(newReading.getTimestamp());
+		tempReading = newReading;
+		return repeated;
+	}
+	
 }
