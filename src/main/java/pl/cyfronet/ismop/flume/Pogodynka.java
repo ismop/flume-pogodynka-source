@@ -63,11 +63,9 @@ public class Pogodynka {
 			JsonNode valueNode = jsonNode.get("currentValue");
 			
 			ZonedDateTime dateTime = ZonedDateTime.parse(dateNode.asText(),
-					DateTimeFormatter.ISO_INSTANT.withZone(
-							ZoneOffset.of("+02:00")));	
+					DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneOffset.UTC));	
 			Date date = Date.from(dateTime.toLocalDateTime()
-					.atZone(
-							ZoneOffset.of("+02:00")).toInstant());
+					.atZone(ZoneOffset.UTC).toInstant());
 			
 			float value = Float.parseFloat(valueNode.asText());
 			
