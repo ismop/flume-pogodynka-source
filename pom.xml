@@ -22,7 +22,7 @@
 
 	<groupId>pl.cyfronet.ismop</groupId>
 	<artifactId>flume-pogodynka-source</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>Pogodynka source</name>

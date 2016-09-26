@@ -46,7 +46,7 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 	private static final String POGODYNKA_SENSOR_ID_KEY = "pogodynkaSensorId";
 	private static final String POGODYNKA_URL_KEY = "pogodynkaUrl";
 	private static final String DAP_CUSTOM_ID_KEY = "dapParameterCustomId";
-	private static final String POLLING_FREQUENCY = "pollingFrequency";
+	private static final String POLLING_FREQUENCY = "pollingFrequencyMinutes";
 	
 	private String pogodynkaUrl;
 	private String pogodynkaSensorId;
@@ -66,7 +66,7 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 		pogodynkaSensorId = context.getString(POGODYNKA_SENSOR_ID_KEY, "149190230");
 		pogodynkaUrl = context.getString(POGODYNKA_URL_KEY, "http://monitor.pogodynka.pl/api/station/hydro/");
 		dapCustomId = context.getString(DAP_CUSTOM_ID_KEY, "POGODYNKA_149190230");
-		pollingFrequency = context.getLong(POLLING_FREQUENCY, 15 /*minutes*/ * 60 /*seconds*/ * 1000L);
+		pollingFrequency = context.getLong(POLLING_FREQUENCY, 15L /*minutes*/);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class PogodynkaSource extends AbstractSource implements Configurable,
 	public Status process() throws EventDeliveryException {
 		Status status = null;
 		try {
-			Thread.sleep(pollingFrequency);
+			Thread.sleep(pollingFrequency  * 60 /*seconds*/ * 1000 /*milliseconds*/);
 			Reading reading = pogodynka.nextReading();
 			Event event = prepareEvent(reading);
 			getChannelProcessor().processEvent(event);
